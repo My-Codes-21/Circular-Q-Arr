@@ -1,0 +1,129 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int choice, item, front = -1, rear = -1, QUE_SIZE;
+int q[100]; // Static array for the deque (max size 100)
+
+void insert_rear() {
+    if (rear == QUE_SIZE - 1) {
+        printf("Queue overflow at rear\n");
+        return;
+    }
+    printf("Enter the item to insert at rear: ");
+    scanf("%d", &item);
+    
+    if (front == -1) front = 0;  // Initialize front if it's the first element
+    rear = rear + 1;
+    q[rear] = item;
+    printf("%d inserted into the queue at rear\n", item);
+}
+
+void insert_front() {
+    if (front == 0) {
+        printf("Queue overflow at front\n");
+        return;
+    }
+    printf("Enter the item to insert at front: ");
+    scanf("%d", &item);
+    
+    if (front == -1) {
+        front = rear = 0; // Initialize front and rear if it's the first element
+    } else {
+        front = front - 1;
+    }
+    q[front] = item;
+    printf("%d inserted into the queue at front\n", item);
+}
+
+int delete_rear() {
+    if (rear == -1) {
+        printf("Queue underflow\n");
+        return -1;
+    }
+    int deleted_item = q[rear];
+    if (front == rear) {
+        front = rear = -1;  // Reset queue when it becomes empty
+    } else {
+        rear = rear - 1;
+    }
+    return deleted_item;
+}
+
+int delete_front() {
+    if (front == -1) {
+        printf("Queue underflow\n");
+        return -1;
+    }
+    int deleted_item = q[front];
+    if (front == rear) {
+        front = rear = -1;  // Reset queue when it becomes empty
+    } else {
+        front = front + 1;
+    }
+    return deleted_item;
+}
+
+void display() {
+    if (front == -1) {
+        printf("Queue is empty\n");
+        return;
+    }
+    printf("Contents of the queue:\n");
+    for (int i = front; i <= rear; i++) {
+        printf("%d\n", q[i]);
+    }
+}
+
+int main() {
+    printf("Enter the size of the deque (max 100): ");
+    scanf("%d", &QUE_SIZE);
+    
+    if (QUE_SIZE > 100) {
+        printf("Queue size exceeds maximum limit of 100.\n");
+        exit(1);
+    }
+
+    while (1) {
+        printf("\nDouble-Ended Queue Operations:\n");
+        printf("1. Insert at rear\n");
+        printf("2. Insert at front\n");
+        printf("3. Delete from rear\n");
+        printf("4. Delete from front\n");
+        printf("5. Display queue\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                insert_rear();
+                break;
+            case 2:
+                insert_front();
+                break;
+            case 3: {
+                int deleted_item = delete_rear();
+                if (deleted_item != -1) {
+                    printf("%d deleted from the rear\n", deleted_item);
+                }
+                break;
+            }
+            case 4: {
+                int deleted_item = delete_front();
+                if (deleted_item != -1) {
+                    printf("%d deleted from the front\n", deleted_item);
+                }
+                break;
+            }
+            case 5:
+                display();
+                break;
+            case 6:
+                exit(0);
+            default:
+                printf("Invalid choice!\n");
+        }
+    }
+
+    return 0;
+}
